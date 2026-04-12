@@ -1,11 +1,622 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <meta charset="utf-8">
-    <title>阿昊的网站</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>徐昊的网站</title>
+    <style>
+        /* 内部CSS样式定义 */
+        body {
+            font-family: Arial, sans-serif;
+            /* 设置网页的主体文本字体为Arial，如果Arial不可用，则使用系统默认的无衬线字体（sans-serif） */
+            margin: 0;
+            /* 设置网页主体（body）的外边距为0，这意味着网页内容会从浏览器窗口的边缘开始，没有额外的空间。 */
+            padding: 0;
+            /* 设置网页主体的内边距为0，这意味着网页内容不会与浏览器窗口的边缘有额外的空间（但注意，这通常不影响内容内部的布局，因为内容内部的元素可以有自己的内边距）。 */
+        }
+        
+        @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
+        /*
+        作用：从 Google Fonts 导入名为 Abril Fatface 的英文字体。
+        细节：display=swap 表示在自定义字体加载完成前，先用系统默认字体显示，加载完成后立即替换，避免页面文字闪烁。
+        */
+
+        header {
+            /* background-color: #4CAF50;*/
+            background-image: url('/Users/xuhao/Desktop/ahao_website/website/image/hs1.png');
+            background-repeat: no-repeat;
+            background-size: 100% 300%;   /* 高度为容器的3倍，宽度为界面宽度 */
+            background-position: center bottom; /* 水平居中，底部对齐 */
+            overflow: hidden;              /* 确保超出部分隐藏 */
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-family: 'Abril Fatface', cursive;
+            font-size: 3rem;
+            margin: 0.2em 0;
+            background: linear-gradient(135deg, 
+                #f0f2f5 0%, #e6e9ef 20%, 
+                #ffffff 40%, #c3c8d2 70%, #8f959e 100%);
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        header nav ul {
+            list-style: none;/* 去掉无序列表默认的项目符号（小黑点） */
+            padding: 0;
+        }
+        
+        header nav ul li {
+            display: inline;
+            margin: 0 1em;
+        }
+        
+        header nav ul li a {
+            font-family: 'Abril Fatface', cursive;
+            background: linear-gradient(135deg, #fff 0%, #ccc 50%, #999 100%);
+            background-clip: text;/*背景裁剪为字体大小*/
+            color: transparent;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);/*字体内部添加阴影*/
+            font-size: 1.8rem;
+            text-decoration: none;/*文字下划线*/
+            transition: 0.3s;
+        }
+        /*
+        nav 是 <nav> 元素，用于导航区域。
+        ul 是无序列表，通常在导航菜单中使用。
+        li 是列表项，每个菜单项。
+        a 是超链接，即菜单项中的链接。
+        */
+        main {
+            padding: 2em;
+        }
+        
+        section {
+            margin-bottom: 2em;
+        }
+        
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;/*水平居中*/
+            padding: 1em 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            z-index:100;/*图层在最上面*/
+        }
+
+        /* .container {
+            display: flex; */
+            /* 使用Flexbox布局 */
+            /* align-items: center; 垂直居中 */
+            /* gap: 0px;  */
+            /* 元素之间的间距 */
+            /* padding: 0px; */
+            /* 容器内边距 */
+        /* } */
+
+        /* 主容器：圆角矩形 + 阴影 + 相对定位，作为分割的参考框 */
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 2000px;
+            height: 520px;
+            background-color: #ffffff;   /* 底色，仅作为缝隙补丁，实际被子元素覆盖 */
+            border-radius: 32px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;            /* 保证圆角裁切所有子元素，clip-path也在此容器内生效 */
+            transition: all 0.2s ease;
+        }
+
+        /* 通用绝对定位，两个子区域各占满整个容器，通过clip-path划分左右 */
+        .container > div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;        
+            overflow-x: auto;
+        }
+
+        .text {
+            /* 左侧区域：从左上角到右下角对角线分割，保留左下图形区域 */
+            /* 这个三角形恰好位于对角线 (0,0)->(100%,100%) 的左下侧，完全贴合 “左上到右下” 分割线 */
+            clip-path: polygon(0% 0%, 0% 100%, 50% 100%, 30% 0%);
+            z-index: 1;
+            /* flex: 1; 文字部分占据剩余空间 */
+            /* width: 1000px; 设置容器的固定宽度 */
+            border: 0px solid #000; /* 可选的边框，用于可视化容器边界 */
+            padding: 10px; /* 可选的内边距 */
+            word-wrap: break-word; /* 确保长单词也能在必要时换行 */
+            white-space: normal; /* 保持正常的空白处理 */
+        }
+
+        .jianjie-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .jianjie-list li {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 12px;/*设置元素四个角的圆角半径。*/
+            transition: 0.2s;
+        }
+
+        /* 第 1 行：金色渐变背景 */
+        .jianjie-list li:first-child {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b5);
+            border-left: 5px solid #f3a712;
+            font-weight: bold;/*字体加粗*?*/
+        }
+
+        /* 第 2 行：浅蓝色背景 + 相机图标 */
+        .jianjie-list li:nth-child(2) {
+            background-color: #e6f4ff;
+            border-left: 5px solid #4096ff;
+            font-weight: bold;
+        }
+        /* .jianjie-list li:nth-child(2)::before {
+            content: "";
+        } */
+
+        .jianjie-list li:nth-child(3) {
+            background-color: #98FF98;
+            border-left: 5px solid #006400;
+            font-weight: bold;
+        }
+
+        .jianjie-list li:nth-child(4) {
+            background-color: #CCE5FF;
+            border-left: 5px solid #00008B;
+            font-weight: bold;
+        }
+
+        .jianjie-list li:nth-child(5) {
+            background-color: #FFCCE5;
+            border-left: 5px solid #C71585;
+            font-weight: bold;
+        }
+
+        .jianjie-list li:last-child {
+            background-color: #EEEEEE;
+            border-left: 5px solid #555555;
+            font-weight: bold;
+        }
+
+        .image {
+            /* max-width: 50%; 图片部分的最大宽度 */
+            /* height: auto; 保持图片比例 */
+
+
+            /* 右侧区域：对角线另一侧，右上图形 */
+            /* 完美贴合对角线的右上侧区域，与左侧无缝拼接 */
+            clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 50% 100%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+            overflow-x: hidden; /* 如果内容超出容器，则显示滚动条*/
+            box-sizing: border-box;
+            padding: 20px; /* 内边距 */
+            border: 0px solid #ccc; /* 可选边框 */
+            margin-left: 20px;
+        }
+
+        .responsive-image {
+            width: auto; 
+            max-height: 500px; /*保持图片宽高比自动调整高度*/
+            margin-top: 20px; /*图片上方间距*/
+        }
+
+        .scroll-content {
+            display: flex; /* 使用flex布局 */
+            animation: scroll 50s linear infinite; /* 动画设置：20秒内完成一次滚动，无限循环 */
+        }
+
+        .scroll-content img {
+            width: auto; /* 图片宽度设置为容器宽度的100% */
+            /* height: 100%; 图片高度自动调整以保持比例 */
+        }
+
+        @keyframes scroll {
+            0% {
+            transform: translateX(2500px); /* 初始位置 */
+            }
+            100% {
+            transform: translateX(0px); /* 滚动到最后一张图片后的位置 */
+            }
+        }
+
+        .containers {
+            position: relative;
+            width: 100%;
+            max-width: 2000px;
+            height: 1020px;
+            background-color: #ffffff;   /* 底色，仅作为缝隙补丁，实际被子元素覆盖 */
+            border-radius: 32px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;            /* 保证圆角裁切所有子元素，clip-path也在此容器内生效 */
+            transition: all 0.2s ease; 
+        }
+
+        .containers > div {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;        
+            overflow-x: auto;
+        }
+
+        .text1{
+            padding: 0px; /* 设置内边距 */
+            margin-left: 800px;
+            border: 0px solid #2c5f8a;
+            z-index: 1;
+        }
+
+        .containers .text1 h2 {
+            font-size: 36px;
+            margin: 100px 200px 0px;
+            padding: 0px;
+        }
+
+        .quanjing-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .quanjing-list li {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 12px;/*设置元素四个角的圆角半径。*/
+            transition: 0.2s;
+        }
+
+        /* 第 1 行：金色渐变背景 */
+        .quanjing-list li:first-child {
+            font-size: 20px;
+            background: linear-gradient(135deg, #fff3e0, #ffe0b5);
+            font-weight: bold;/*字体加粗*?*/
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        /* 第 2 行：浅蓝色背景 + 相机图标 */
+        .quanjing-list li:nth-child(2) {
+            font-size: 20px;
+            background-color: #e6f4ff;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .quanjing-list li:last-child {
+            font-size: 20px;
+            background-color: #98FF98;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        /* ***********************网页窗口配置******************************** */
+        /* 定义sidebar的样式 */
+        #sidebar {
+            width: 1000px; /* 设置宽度 */
+            height: 1000px; /* 高度设置为100%，即占满整个页面高度 */
+            background-color: #f4f4f4; /* 设置背景颜色 */
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1); /* 添加阴影效果 */
+            /* display: none; 初始时隐藏 */
+            display: flex;
+            padding: 0px; /* 设置内边距 */
+            margin-left:  0px;
+            border-radius: 100%;
+            border: 10px solid #FFFFFF;
+            z-index: 2;
+        }
+        
+        /* 定义sidebar内iframe的样式 */
+        #sidebar iframe {
+            width: 100%; /* 宽度设置为100%，即占满sidebar的宽度 */
+            border: 0px; /* 移除边框 */
+        }
+        
+        /* 定义链接的样式（虽然这里没有具体样式，但保留了id以便JavaScript操作） */
+        #link {
+            margin: 0px; /* 设置外边距 */
+        }
+        /* ***********************网页窗口******************************** */
+
+
+        /* ***********************网页窗口配置******************************** */
+        /* 定义sidebar的样式 */
+        #sidebar1 {
+            width: 1300px; /* 设置宽度 */
+            height: 1000px; /* 高度设置为100%，即占满整个页面高度 */
+            background-color: #f4f4f4; /* 设置背景颜色 */
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1); /* 添加阴影效果 */
+            /* display: none; 初始时隐藏 */
+            display: flex;
+            overflow-y: auto; /* 允许垂直滚动 */
+            padding: 10px; /* 设置内边距 */
+            margin-left: 0px;
+        }
+        
+        /* 定义sidebar内iframe的样式 */
+        #sidebar1 iframe {
+            width: 100%; /* 宽度设置为100%，即占满sidebar的宽度 */
+            height: calc(100% - 20px); /* 高度设置为sidebar高度减去内边距，确保内容不被内边距遮挡 */
+            border: 0px; /* 移除边框 */
+        }
+        
+        /* 定义链接的样式（虽然这里没有具体样式，但保留了id以便JavaScript操作） */
+        #link {
+            margin: 20px; /* 设置外边距 */
+        }
+        /* ***********************网页窗口******************************** */
+
+
+        .iframe-container2 {
+            display: flex;
+            flex-wrap: wrap;
+            /* flex: 1 1 50%; Each iframe takes up 50% of the row */
+            overflow-y: auto; /* 允许垂直滚动 */
+            background-color: #f4f4f4; /* 设置背景颜色 */
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1); /* 添加阴影效果 */
+            padding: 10px;
+            box-sizing: border-box;
+            border: 2px solid #000000;
+            /* border: 20px; */
+        }
+        .iframe2 {
+            width: 49%;
+            height: 500px; /* Adjust height as needed */
+            border: 2px solid #000000; 
+        }
+        /* 其他样式... */
+
+        textarea {
+            width: 96%;
+            height: 80%;
+            padding: 10px;
+            border: 0px solid #007BFF;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .save-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007BFF;
+            color: #fff;
+            cursor: pointer;
+        }
+        .save-button:hover {
+            background-color: #0056b3;
+        }
+        /* 其他样式... */
+    </style> 
 </head>
 <body>
-    <h1>你好，阿昊！</h1>
-    <p>我的第一个GitHub Pages网站。</p>
+    <header>
+        <!-- <h1><p class="animated-text">我的世界</p></h1> -->
+        <h1>中国华水水电开发有限公司</h1> 
+
+        <nav>
+            <ul>
+                <li><a href="#section1">项目简介</a></li>
+                <li><a href="#section2">现场全景</a></li>
+                <li><a href="#section3">事项通知</a></li>
+                <li><a href="#section4">人工智能</a></li>
+            </ul>
+        </nav>
+    </header>
+ 
+    <main>
+        <section id="section1">
+            <div class="container">
+                <div class="text">
+                    <h1>🏞️ 项目简介</h1>
+                    <p>
+                    <ul class="jianjie-list">
+                        <li>
+                            电站位置：安徽省池州市石台县仙寓镇<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            距离池州市63km，距离合肥市185km
+                        </li>
+                        <li>装机容量：1200MW（4*300MW）</li>
+                        <li>年发电量：设计年发电量14.71亿kw.h<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            设计年抽水用电量19.61亿kw.h
+                        </li>
+                        <li>供电范围：服务于安徽电网</li>
+                        <li>主要任务：调峰、填谷、储能、调频、调相、紧急事故备用</li>
+                        <li>
+                            工期安排：2023年7月，主体工程开工<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            2027年7月，首台机组投产发电，发电工期58个月，总工期67个月
+                        </li>
+                    </ul>
+                </div>
+                <div class="image">
+                    <!-- <img src="/Users/xuhaomac/Desktop/code/网页测试/图片10.png" alt="描述图片内容的文本" class="responsive-image"> -->
+                    <div class="scroll-content">
+                        <img src="image/图1.jpeg" alt="图片1" class="responsive-image">
+                        <img src="image/图2.jpeg" alt="图片2" class="responsive-image">
+                        <img src="image/图3.jpg" alt="图片3" class="responsive-image">
+                        <img src="image/图4.jpeg" alt="图片4" class="responsive-image">
+                        <img src="image/图5.jpeg" alt="图片5" class="responsive-image">
+                        <img src="image/图6.jpeg" alt="图片6" class="responsive-image">
+                        <img src="image/图7.jpg" alt="图片7" class="responsive-image">
+                        <!-- 如果需要更多图片，继续添加 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+ 
+        <section id="section2">
+            <!-- <h2>生活</h2> -->
+
+            <div class="containers">
+                <div class="text1">
+                    <h2>🌍 现场全景</h2>
+                    <ul class="quanjing-list">
+                        <li>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            拍摄内容：<br>
+                            <!-- <br> -->
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            下水库进出水口、500kV开关站
+                        </li>
+                        <li>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            拍摄日期：<br>
+                            <!-- <br> -->
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            2027年4月
+                        </li>
+                        <li>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            拍摄方式：<br>
+                            <!-- <br> -->
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            大疆无人机
+                        </li>
+                    </ul>
+                </div>
+                <div id="sidebar">
+                    <iframe id="content-iframe" src="https://www.720yun.com/t/88akuyfygry?scene_id=129368758"></iframe>
+                </div>
+            </div>
+        </section>
+
+        <section id="section3">
+            <h3>📢 事项通知</h3>
+            <p>安全、质量、环保</p>
+            <div class="iframe-container2">
+                <div class="iframe2" >
+                    <!-- <p>Click the link below to download the Word document.</p> -->
+                    <a href="http://192.168.10.239/document/副本3月第1期周例会会议纪要_副本7" download="document.docx">1、副本3月第1期周例会会议纪要_副本7.docx</a>
+                </div>
+                <div class="iframe2" >
+                    <textarea id="editableText" placeholder="Enter your text here..."></textarea>
+                    <button class="save-button" onclick="saveText()">存储</button>
+                </div>
+            </div>
+            <p>生产</p>
+            <div class="iframe-container2">
+                <div class="iframe2" >
+                    <!-- <p>Click the link below to download the Word document.</p> -->
+                    <a href="http://192.168.10.239/document/副本3月第1期周例会会议纪要_副本7" download="document.docx">1、副本3月第1期周例会会议纪要_副本7.docx</a>
+                </div>
+                <div class="iframe2" >
+                    <textarea id="editableText" placeholder="Enter your text here..."></textarea>
+                    <button class="save-button" onclick="saveText()">存储</button>
+                </div>
+            </div>
+            <p>合同、综合</p>
+            <div class="iframe-container2">
+                <div class="iframe2" >
+                    <!-- <p>Click the link below to download the Word document.</p> -->
+                    <a href="http://192.168.10.239/document/副本3月第1期周例会会议纪要_副本7" download="document.docx">1、副本3月第1期周例会会议纪要_副本7.docx</a>
+                </div>
+                <div class="iframe2" >
+                    <textarea id="editableText" placeholder="Enter your text here..."></textarea>
+                    <button class="save-button" onclick="saveText()">存储</button>
+                </div>
+            </div>
+            <p>其他</p>
+            <div class="iframe-container2">
+                <div class="iframe2" >
+                    <!-- <p>Click the link below to download the Word document.</p> -->
+                    <a href="http://192.168.10.239/document/副本3月第1期周例会会议纪要_副本7" download="document.docx">1、副本3月第1期周例会会议纪要_副本7.docx</a>
+                </div>
+                <div class="iframe2" >
+                    <textarea id="editableText" placeholder="Enter your text here..."></textarea>
+                    <button class="save-button" onclick="saveText()">存储</button>
+                </div>
+            </div>
+
+            <script>
+                // Function to format the current date and time
+                function getCurrentDateTime() {
+                    const now = new Date();
+                    const year = now.getFullYear();
+                    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero based
+                    const day = String(now.getDate()).padStart(2, '0');
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const minutes = String(now.getMinutes()).padStart(2, '0');
+                    const seconds = String(now.getSeconds()).padStart(2, '0');
+                    return `<${year}-${month}-${day} ${hours}:${minutes}:${seconds}>`;
+                }
+     
+                // Function to save text to localStorage with a timestamp
+                function saveText() {
+                    const textArea = document.getElementById('editableText');
+                    const textContent = textArea.value.trim(); // Remove any leading/trailing whitespace
+                    const timestamp = getCurrentDateTime();
+                    const savedText = textContent ? `${textContent}\n\n${timestamp}\n\n\n\n\n` : timestamp; // Append timestamp if there's text, otherwise just save timestamp
+                    localStorage.setItem('editableTextContent', savedText);
+                    alert('已存储');
+                }
+    
+            </script>
+        </section>
+ 
+        <section id="section4">
+            <h4>🤖 人工智能</h4>
+            <div id="sidebar1">
+                <iframe id="content-iframe1" src="about:blank"></iframe>
+            </div>
+
+            <script>
+                window.onload = function() {
+                    var iframe = document.getElementById('content-iframe');
+                    var linkUrl = 'https://www.720yun.com/t/b2akib79O1b?scene_id=124243639'; // 指定要打开的链接
+                    iframe.src = linkUrl; // 设置iframe的src属性为链接的URL
+
+                    var iframe1 = document.getElementById('content-iframe1');
+                    var linkUrl1 = 'https://yiyan.baidu.com/'; // 指定要打开的链接
+                    iframe1.src = linkUrl1; // 
+
+                    const savedText = localStorage.getItem('editableTextContent');
+                    if (savedText) {
+                        document.getElementById('editableText').value = savedText;
+                    }
+                };
+            </script>
+        </section>
+
+
+    </main>
+ 
+    <footer>
+        <p> ✨ 努力的小徐 ✨ </p>
+    </footer>
+
 </body>
 </html>
